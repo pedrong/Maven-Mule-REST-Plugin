@@ -1,4 +1,4 @@
-package org.mule.tools.maven.rest;
+package com.github.pedrong.maven.plugin.mule;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
@@ -43,6 +43,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.github.pedrong.maven.plugin.mule.MuleRest;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 public class MuleRestTest {

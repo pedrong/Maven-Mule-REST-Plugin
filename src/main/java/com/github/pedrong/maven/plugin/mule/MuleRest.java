@@ -1,4 +1,4 @@
-package org.mule.tools.maven.rest;
+package com.github.pedrong.maven.plugin.mule;
 
 import java.io.File;
 import java.io.FileInputStream;

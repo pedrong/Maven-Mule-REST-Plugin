@@ -1,8 +1,6 @@
-#Maven Mule REST Plugin#
+#Maven Mule Plugin#
 
-This is a project to utilize the RESTful interface that is provided for the Management console on Mule ESB's Enterprise Edition. 
-
-This plugin assumes that you have configured the [maven-mule-plugin](https://github.com/mulesoft/maven-mule-plugin) to generated the mule application archive
+This project was forked from https://github.com/NicholasAStuart/Maven-Mule-REST-Plugin. Among many changes, the main one is that I have added support for Mule Domain deployment through Mule Agent (https://docs.mulesoft.com/mule-agent/v/1.4.0/).
 
 This is a personal project and is not affiliated with MuleSoft or the maven mule plugin in any way.
 
@@ -13,9 +11,9 @@ Example:
 		<build>
 			<plugins>
 				<plugin>
-					<groupId>com.github.nicholasastuart</groupId>
-					<artifactId>mule-mmc-rest-plugin</artifactId>
-					<version>1.2.0</version>
+					<groupId>com.github.pedrong</groupId>
+					<artifactId>mule-maven-plugin</artifactId>
+					<version>1.3.0-SNAPSHOT</version>
 				</plugin>
 			</plugins>
 		</build>
@@ -26,7 +24,7 @@ Example:
 
 There is only one goal, deploy. To call the plugin, do the following
 
-	mule-mmc-rest-plugin:deploy
+	mule-maven-plugin:deploy
 	
 This goal will
 *   delete an existing mule application archive from the MMC Repository if version contains "SNAPSHOT"
@@ -49,18 +47,25 @@ In order to post to the Mule Repository, you need only these permissions:
 		<th>Default
 <tr>
 	<td>
-		muleApiUrl
+		mmcApiUrls
 	<td>
-		The URL of the Mule MMC API (usually .../api)
+		The URLs of the Mule MMC(s) API (usually .../api). Not used for domain deployment. See agentApiUrls below.
 	<td>
 		http://localhost:8585/mmc/api
 <tr>
 	<td>
+		agentApiUrls
+	<td>
+		The URLs of the Mule Agent(s) API. Mandatory for domain deployment.
+	<td>
+
+<tr>
+	<td>
 		name
 	<td>
-		What to name the application when it is uploaded to the repository
+		What to name the application/domain when it is uploaded to the repository
 	<td>
-		MuleApplication
+		${project.build.finalName}
 <tr>
 	<td>
 		deploymentName
@@ -74,12 +79,18 @@ In order to post to the Mule Repository, you need only these permissions:
 	<td>
 		What version to give the software when it is uploaded to the repository
 	<td>
-		Current Time, in MM-dd-yyyy HH:mm:ss format
+		${project.version}
 <tr>
 	<td>
 		serverGroup
 	<td>
 		The name of the target Mule serverGroup
+	<td>
+<tr>
+	<td>
+		clusterName
+	<td>
+		The name of the target Mule cluster
 	<td>
 <tr>
 	<td>
