@@ -24,7 +24,7 @@ Example:
 
 There is only one goal, deploy. To call the plugin, do the following
 
-	mule-maven-plugin:deploy
+	mule:deploy
 	
 This goal will
 *   delete an existing mule application archive from the MMC Repository if version contains "SNAPSHOT"

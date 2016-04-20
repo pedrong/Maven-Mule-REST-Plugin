@@ -1,21 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pedrong</groupId>
 	<artifactId>mule-maven-plugin</artifactId>
 	<version>1.3.0-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
-	<name>Mule MMC REST Plugin</name>
-	<description>Maven plugin for performing RESTful actions to the Mule ESB MMC</description>
-	<url>https://github.com/pedrong/Maven-Mule-REST-Plugin.git</url>
-	
+	<name>Mule Maven Plugin</name>
+	<description>Maven plugin for performing useful REST requests to the Mule Management Console (MMC) API and Mule Agent API</description>
+	<url>https://github.com/pedrong/mule-maven-plugin</url>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-    
+
 	<scm>
-		<connection>scm:git:git@github.com:pedrong/Maven-Mule-REST-Plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:pedrong/Maven-Mule-REST-Plugin.git</developerConnection>
-		<url>git@github.com:pedrong/Maven-Mule-REST-Plugin.git</url>
+		<connection>scm:git:git@github.com:pedrong/mule-maven-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:pedrong/mule-maven-plugin.git</developerConnection>
+		<url>git@github.com:pedrong/mule-maven-plugin.git</url>
 	</scm>
 
 	<licenses>
@@ -37,8 +38,13 @@
 			<name>Mohamed EL HABIB</name>
 			<email>melhabib@digitas.fr</email>
 		</developer>
+		<developer>
+			<id>pedrong</id>
+			<name>Pedro Gontijo</name>
+			<email>pedrong@gmail.com</email>
+		</developer>
 	</developers>
-	
+
 	<contributors>
 		<contributor>
 			<name>Matt Hoffman</name>
@@ -91,19 +97,19 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.2</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -132,14 +138,15 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<target>1.8</target>
-					<source>1.8</source>
+					<target>1.6</target>
+					<source>1.6</source>
 				</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -179,17 +186,17 @@
 			<activation>
 				<jdk>[1.8,)</jdk>
 			</activation>
-		<build>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<configuration>
-						<additionalparam>-Xdoclint:none</additionalparam>
-					</configuration>
-				</plugin>
-			</plugins>
-		</build>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>
