@@ -38,7 +38,7 @@ public class DeployTest {
 		deploy.outputDirectory = File.createTempFile("456", null);
 
 		deploy.finalName = "";
-		deploy.muleApiUrl = new URL("http", "localhost", 8080, "");
+//		deploy.muleApiUrl = new URL("http", "localhost", 8080, "");
 		deploy.username = USER_NAME;
 		deploy.password = PASSWORD;
 		deploy.serverGroup = SERVER_GROUP;

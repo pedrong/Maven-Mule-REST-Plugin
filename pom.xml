@@ -1,26 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>com.github.nicholasastuart</groupId>
-	<artifactId>mule-mmc-rest-plugin</artifactId>
-	<version>1.2.2-SNAPSHOT</version>
+	<groupId>com.github.pedrong</groupId>
+	<artifactId>mule-maven-plugin</artifactId>
+	<version>1.3.0-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<name>Mule MMC REST Plugin</name>
 	<description>Maven plugin for performing RESTful actions to the Mule ESB MMC</description>
-	<url>https://github.com/NicholasAStuart/Maven-Mule-REST-Plugin.git</url>
+	<url>https://github.com/pedrong/Maven-Mule-REST-Plugin.git</url>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
     
 	<scm>
-		<connection>scm:git:git@github.com:NicholasAStuart/Maven-Mule-REST-Plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:NicholasAStuart/Maven-Mule-REST-Plugin.git</developerConnection>
-		<url>git@github.com:NicholasAStuart/Maven-Mule-REST-Plugin.git</url>
+		<connection>scm:git:git@github.com:pedrong/Maven-Mule-REST-Plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:pedrong/Maven-Mule-REST-Plugin.git</developerConnection>
+		<url>git@github.com:pedrong/Maven-Mule-REST-Plugin.git</url>
 	</scm>
 
 	<licenses>
@@ -63,6 +58,12 @@
 			<version>3.0.5</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>3.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
@@ -90,6 +91,11 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -126,8 +132,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<target>1.6</target>
-					<source>1.6</source>
+					<target>1.8</target>
+					<source>1.8</source>
 				</configuration>
 			</plugin>
 		</plugins>
