@@ -186,6 +186,7 @@ public class Deploy extends AbstractMojo {
 	        	InputStreamEntity entity = new InputStreamEntity(new FileInputStream(domainFile));
 	            HttpPut put = new HttpPut(url);
 	            put.setEntity(entity);
+	            put.setHeader("Content-Type", "application/octet-stream");
 	            
 	            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 	        	CloseableHttpClient client = httpClientBuilder.build();
