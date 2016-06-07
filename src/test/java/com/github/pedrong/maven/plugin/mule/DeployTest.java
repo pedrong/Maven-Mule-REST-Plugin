@@ -2,6 +2,7 @@ package com.github.pedrong.maven.plugin.mule;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,7 +44,7 @@ public class DeployTest {
 		deploy.outputDirectory = File.createTempFile("456", null);
 
 		deploy.finalName = "";
-		deploy.mmcApiUrls = new URL[]{new URL("http", "localhost", 8080, "")};
+		deploy.mmcApiUrls = Arrays.asList("http://localhost:8080");
 		deploy.username = USER_NAME;
 		deploy.password = PASSWORD;
 		deploy.serverGroup = SERVER_GROUP;
@@ -58,7 +59,7 @@ public class DeployTest {
 		doNothing().when(deploy).validateProject(any(File.class));
 		doReturn(null).when(deploy).getMuleZipFile(any(File.class), anyString());
 		mockMuleRest = mock(MuleRest.class);
-		when(deploy.buildMuleRest(deploy.mmcApiUrls[0])).thenReturn(mockMuleRest);
+		when(deploy.buildMuleRest(new URL(deploy.mmcApiUrls.get(0)))).thenReturn(mockMuleRest);
 		when(mockMuleRest.restfullyUploadRepository(anyString(), anyString(), any(File.class))).thenReturn(VERSION_ID);
 		when(mockMuleRest.restfullyCreateDeployment(anyString(), anyString(), (String) isNull(), anyString())).thenReturn(DEPLOYMENT_ID);
 	}

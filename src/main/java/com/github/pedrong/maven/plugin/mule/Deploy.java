@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.InputStreamEntity;
@@ -36,6 +38,7 @@ public class Deploy extends AbstractMojo {
 	 * ${project.build.finalName}
 	 */
 	@Parameter(defaultValue = "${project.build.finalName}", required = true)
+	@com.beust.jcommander.Parameter(names = {"-n", "--name"}, required = false, description = "Name of the application/domain. If not provided the application will try to get the name from the file name.")
 	protected String name;
 
 	/**
@@ -50,18 +53,21 @@ public class Deploy extends AbstractMojo {
 	 * current time in milliseconds.
 	 */
 	@Parameter(defaultValue = "${project.version}", required = true)
+	@com.beust.jcommander.Parameter(names = {"-v", "--version"}, required = false, description = "Version to be used on deployment. If not provided the application will try to get the version from the file name.")
 	protected String version;
 
 	/**
 	 * The username for MMC
 	 */
 	@Parameter(property = "mmcUsername")
+	@com.beust.jcommander.Parameter(names = {"-u", "--mmcUsername"}, required = false, description = "MMC username. Required for application (not domains) deployment.")
 	protected String username;
 
 	/**
 	 * Password for MMC user
 	 */
 	@Parameter(property = "mmcPassword")
+	@com.beust.jcommander.Parameter(names = {"-p", "--mmcPassword"}, required = false, description = "MMC password. Required for application (not domains) deployment.")
 	protected String password;
 
 	/**
@@ -73,21 +79,25 @@ public class Deploy extends AbstractMojo {
 	/**
 	 */
 	@Parameter(property = "mmcApiUrls")
-	protected URL[] mmcApiUrls;
+	@com.beust.jcommander.Parameter(names = {"-m", "--mmcApiUrls"}, required = false, description = "MMC API URLs. Required for application deployment. For domain deployment please use --agentApiUrls")
+	protected List<String> mmcApiUrls = new ArrayList<String>();
 
 	/**
 	 */
 	@Parameter(property = "agentApiUrls")
-	protected String[] agentApiUrls;
+	@com.beust.jcommander.Parameter(names = {"-a", "--agentApiUrls"}, required = false, description = "Mule Agent API URLs. Required for domain deployment. For application deployment please use --mmcApiUrls")
+	protected List<String> agentApiUrls = new ArrayList<String>();
 
 	/**
 	 */
 	@Parameter(property = "serverGroup")
+	@com.beust.jcommander.Parameter(names = {"-g", "--serverGroup"}, required = false, description = "Server group name to be deployed to. Ignored if --clusterName is provided. Valid only for application deployment.")
 	protected String serverGroup;
 
 	/**
 	 */
 	@Parameter(property = "clusterName")
+	@com.beust.jcommander.Parameter(names = {"-c", "--clusterName"}, required = false, description = "Cluster name where the artifact will be deployed. Valid only for application deployment.")
 	protected String clusterName;
 	
 	/**
@@ -96,7 +106,13 @@ public class Deploy extends AbstractMojo {
 	@Parameter (defaultValue = "${project.packaging}", required = true)
 	protected String packaging;
 	
+	@com.beust.jcommander.Parameter(names = {"-f", "--file"}, required = true, description = "File to be deployed.")
+	protected File artifactFile;
+	
 	protected MuleRest muleRest;
+
+	@com.beust.jcommander.Parameter(names = {"-h", "--help"}, help = true, description = "Help information.")
+	protected boolean commandLineHelp;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -104,22 +120,20 @@ public class Deploy extends AbstractMojo {
 		File muleDeployableFile = getMuleZipFile(outputDirectory, finalName);
 		
 		if (packaging.equalsIgnoreCase("mule-domain")) {
-			validateConfigurationForDomainDeploy();
 			deployMuleDomain(muleDeployableFile);
 		} else {
-			validateConfigurationForApplicationDeploy();
 			deployMuleApplication(muleDeployableFile);
 		}
 	}
 
 	protected void validateConfigurationForDomainDeploy() throws MojoFailureException {
-		if (agentApiUrls.length == 0) {
+		if (agentApiUrls.size() == 0) {
 			throw new MojoFailureException("Domain deployment is only supported via Mule Agent API. Please inform agentApiUrls.");
 		}
 	}
 
 	protected void validateConfigurationForApplicationDeploy() throws MojoFailureException {
-		if (mmcApiUrls.length == 0) {
+		if (mmcApiUrls.size() == 0) {
 			throw new MojoFailureException("Currently mule application deployment is only supported via MMC REST API. Please inform mmcApiUrls.");
 		}
 		
@@ -138,12 +152,14 @@ public class Deploy extends AbstractMojo {
 	}
 
 	protected void deployMuleApplication(File appFile) throws MojoFailureException {
-		for (URL mmcApiUrl : mmcApiUrls) {
+		validateConfigurationForApplicationDeploy();
+		
+		for (String mmcApiUrl : mmcApiUrls) {
 			try {
 				//validateProject(appDirectory);
 				getLog().info("Starting deployment of application file " + appFile);
 				
-				muleRest = buildMuleRest(mmcApiUrl);
+				muleRest = buildMuleRest(new URL(mmcApiUrl));
 				String versionId = muleRest.restfullyUploadRepository(name, version, appFile);
 				String deploymentId = muleRest.restfullyCreateDeployment(serverGroup, deploymentName, clusterName, versionId);
 				muleRest.restfullyDeployDeploymentById(deploymentId);
@@ -176,6 +192,8 @@ public class Deploy extends AbstractMojo {
 
 	protected void deployMuleDomain(File domainFile) throws MojoFailureException {
         getLog().info("Starting deployment of domain [" + name + "]");
+        
+        validateConfigurationForDomainDeploy();
         
         for (String baseUrl : agentApiUrls) {
         	String url = baseUrl.trim() + "/domains/" + name;
